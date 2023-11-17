@@ -10,8 +10,30 @@ import CoreData
 
 struct ContentView: View {
     var body: some View {
-        ZStack {
-            Text("Hello, world!")
+        TabView {
+            SearchScreenView()
+                .tabItem {
+                    Image(systemName: "magnifyingglass")
+                    Text("Search")
+                }
+            
+            IngredientsScreenView()
+                .tabItem {
+                    Image(systemName: "takeoutbag.and.cup.and.straw")
+                    Text("Ingredients")
+                }
+            
+            FavouritesScreenView()
+                .tabItem {
+                    Image(systemName: "heart.fill")
+                    Text("Favourites")
+                }
+            
+            ProfileScreenView()
+                .tabItem {
+                    Image(systemName: "person.fill")
+                    Text("Preferences")
+                }
         }
     }
 }
