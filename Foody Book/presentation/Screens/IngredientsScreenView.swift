@@ -11,11 +11,12 @@ import CoreData
 struct IngredientsScreenView: View {
     @Environment(\.managedObjectContext) var managedObjContext
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \AvailableIngredient.name, ascending: true)],
+        sortDescriptors: [NSSortDescriptor(keyPath: \Ingredient.name, ascending: true)],
         animation: .default)
-    private var availableIngredients: FetchedResults<AvailableIngredient>
+    private var ingredients: FetchedResults<Ingredient>
     
     @State private var showAddIngredientView = false
+    @State private var selectedType: IngredientType = .available
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -32,29 +33,49 @@ struct IngredientsScreenView: View {
                 }
                 .buttonStyle(.bordered)
                 .sheet(isPresented: $showAddIngredientView) {
-                    AvailableIngredientModalView(isPresented: $showAddIngredientView)
+                    NewIngredientModalView(
+                        isPresented: $showAddIngredientView,
+                        selectedType: selectedType
+                    )
                 }
             }
-            .padding(.horizontal, 10)
             .padding(.vertical, 12)
             
+            Picker("Ingredient type", selection: $selectedType) {
+                ForEach(IngredientType.allCases) { type in
+                    Text(type.rawValue.capitalized)
+                }
+            }
+            .pickerStyle(.segmented)
+            
             List {
-                ForEach(availableIngredients) { ingredient in
+                ForEach(getFilteredItems()) { ingredient in
                     IngredientInformationView(ingredientName: ingredient.name ?? "")
                 }.onDelete(perform: deleteIngredient)
             }
             .listStyle(.plain)
+            .padding(.horizontal, -16)
         }
         .padding(.horizontal, 16)
     }
     
     private func deleteIngredient(offsets: IndexSet) {
         withAnimation {
-            offsets.map { availableIngredients[$0] }.forEach(managedObjContext.delete)
-            
+            offsets.map { getFilteredItems()[$0] }.forEach(managedObjContext.delete)
             LocalDataController().saveData(context: managedObjContext)
         }
     }
+    
+    private func getFilteredItems() -> Array<Ingredient> {
+        return self.ingredients.filter { ingredient in
+            ingredient.type == selectedType.rawValue
+        }
+    }
+}
+
+enum IngredientType: String, CaseIterable, Identifiable {
+    case available, unliked, allergic
+    var id: Self { self }
 }
 
 struct IngredientsScreenView_Previews: PreviewProvider {

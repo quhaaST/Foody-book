@@ -30,12 +30,6 @@ struct ContentView: View {
                     Image(systemName: "heart.fill")
                     Text("Favourites")
                 }
-            
-            ProfileScreenView()
-                .tabItem {
-                    Image(systemName: "person.fill")
-                    Text("Preferences")
-                }
         }
     }
 }
