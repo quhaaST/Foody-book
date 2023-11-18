@@ -30,10 +30,11 @@ class LocalDataController: ObservableObject {
         }
     }
     
-    func addAvailableIngredient(context: NSManagedObjectContext, name: String) {
-        let availableIngredient = AvailableIngredient(context: context)
-        availableIngredient.id = UUID()
-        availableIngredient.name = name
+    func addIngredient(context: NSManagedObjectContext, name: String, type: IngredientType) {
+        let ingredient = Ingredient(context: context)
+        ingredient.id = UUID()
+        ingredient.name = name
+        ingredient.type = type.rawValue
         
         saveData(context: context)
     }
