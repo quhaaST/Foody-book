@@ -97,7 +97,6 @@
 				1DAA730A2B0A4C05009EB85F /* Helpers */,
 				1DAA72B12B078C89009EB85F /* Foody_BookApp.swift */,
 				1DAA72D32B07A38F009EB85F /* data */,
-				1DAA72D22B07A387009EB85F /* domain */,
 				1DAA72D12B07A365009EB85F /* presentation */,
 				1DAA72B52B078C89009EB85F /* Assets.xcassets */,
 				1DAA72BC2B078C89009EB85F /* Foody_Book.xcdatamodeld */,
@@ -144,13 +143,6 @@
 				1DAA72C52B079966009EB85F /* Screens */,
 			);
 			path = presentation;
-			sourceTree = "<group>";
-		};
-		1DAA72D22B07A387009EB85F /* domain */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = domain;
 			sourceTree = "<group>";
 		};
 		1DAA72D32B07A38F009EB85F /* data */ = {

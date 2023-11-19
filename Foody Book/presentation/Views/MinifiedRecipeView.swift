@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct MinifiedRecipeView: View {
+    @Environment(\.managedObjectContext) var managedObjContext
+    
     let minifiedRecipeModel: MinifiedRecipeModel
-    let onLiked: (Int) -> Void
-    let onDisliked: (Int) -> Void
-    @State var isInFavorites: Bool
+    
+    @State private var isInFavorites = false
+    @State private var favouriteRecipes: [MinifiedFavouriteRecipe] = []
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -38,9 +41,9 @@ struct MinifiedRecipeView: View {
                             isInFavorites.toggle()
                             
                             if isInFavorites {
-                                onLiked(minifiedRecipeModel.id)
+                                onRecipeLiked(recipe: minifiedRecipeModel)
                             } else {
-                                onDisliked(minifiedRecipeModel.id)
+                                onRecipeDisliked(recipeId: minifiedRecipeModel.id)
                             }
                         } label: {
                             if isInFavorites {
@@ -89,9 +92,48 @@ struct MinifiedRecipeView: View {
             
             Spacer()
         }
+        .onAppear {
+            loadFavouritesStatus()
+        }
         .background(Color.white)
         .cornerRadius(12)
         .shadow(radius: 4)
+    }
+    
+    private func onRecipeLiked(recipe: MinifiedRecipeModel) {
+        LocalDataController()
+            .addFavouriteRecipe(
+                context: managedObjContext,
+                recipeModel: recipe
+            )
+    }
+    
+    private func onRecipeDisliked(recipeId: Int) {
+        favouriteRecipes
+            .filter { recipe in
+                recipe.id == Int32(recipeId)
+            }
+            .forEach { recipe in
+                managedObjContext.delete(recipe)
+            }
+        
+        LocalDataController().saveData(context: managedObjContext)
+    }
+    
+    private func loadFavouritesStatus() {
+        let request = MinifiedFavouriteRecipe.fetchRequest()
+        
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \MinifiedFavouriteRecipe.title, ascending: true)]
+        request.predicate = NSPredicate(format: "id = %@", String(minifiedRecipeModel.id))
+        
+        do {
+            let data = try managedObjContext.fetch(request)
+            favouriteRecipes = data
+            isInFavorites = !data.isEmpty
+        } catch {
+            favouriteRecipes = []
+            isInFavorites = false
+        }
     }
 }
 
@@ -102,13 +144,8 @@ struct MinifiedRecipeView_Previews: PreviewProvider {
                 id: 1,
                 title: "Title",
                 image: "https://spoonacular.com/recipeImages/615374-312x231.jpg",
-                usedIngredientCount: 10,
-                missedIngredientCount: 10,
-                likes: 0
-            ),
-            onLiked: { _ in },
-            onDisliked: { _ in },
-            isInFavorites: false
+                missedIngredientCount: 10
+            )
         )
     }
 }
