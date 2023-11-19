@@ -16,6 +16,11 @@ struct RecipeDetailedInformationModel: Hashable, Codable {
     let sourceUrl: String
     let summary: String
     let extendedIngredients: [ExtendedIngredientModel]
+    let vegetarian: Bool
+    let vegan: Bool
+    let glutenFree: Bool
+    let dairyFree: Bool
+    let cheap: Bool
 }
 
 struct ExtendedIngredientModel: Hashable, Codable {

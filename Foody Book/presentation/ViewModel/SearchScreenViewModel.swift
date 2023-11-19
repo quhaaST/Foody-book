@@ -6,9 +6,21 @@
 //
 
 import Foundation
+import CoreData
 
 class SearchScreenViewModel: ObservableObject {
     @Published var minifiedRecipes: [MinifiedRecipeModel] = []
+    @Published var availableIngredients: [Ingredient] = []
+    
+    func loadDataUpdates(context: NSManagedObjectContext) {
+        fetchAvailableProducts(context: context)
+        
+        fetchRecipesByIngredients(
+            availableIngredients.map { ingredient in
+                ingredient.name ?? ""
+            }
+        )
+    }
     
     func fetchRecipesByIngredients(_ ingredients: [String]) {
         let request = RemoteNetworkService()
@@ -31,5 +43,19 @@ class SearchScreenViewModel: ObservableObject {
         }
         
         task.resume()
+    }
+    
+    func fetchAvailableProducts(context: NSManagedObjectContext) {
+        let request = Ingredient.fetchRequest()
+        
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \Ingredient.id, ascending: true)]
+        request.predicate = NSPredicate(format: "type == %@", IngredientType.available.rawValue)
+        
+        do {
+            let data = try context.fetch(request)
+            availableIngredients = data
+        } catch {
+            availableIngredients = []
+        }
     }
 }

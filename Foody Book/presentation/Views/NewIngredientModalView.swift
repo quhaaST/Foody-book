@@ -62,7 +62,8 @@ struct NewIngredientModalView: View {
     }
     
     private func addIngredient() {
-        LocalDataController()
+        LocalDataController
+            .shared
             .addIngredient(
                 context: managedObjContext,
                 name: name,

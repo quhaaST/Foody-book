@@ -20,7 +20,7 @@ struct MinifiedRecipeView: View {
         VStack(alignment: .leading, spacing: 0) {
             ZStack(alignment: .center) {
                 VStack {
-                    HStack {
+                    HStack(alignment: .center) {
                         AsyncImage(url: URL(string: minifiedRecipeModel.image)) { image in
                             image
                                 .resizable()
@@ -101,7 +101,8 @@ struct MinifiedRecipeView: View {
     }
     
     private func onRecipeLiked(recipe: MinifiedRecipeModel) {
-        LocalDataController()
+        LocalDataController
+            .shared
             .addFavouriteRecipe(
                 context: managedObjContext,
                 recipeModel: recipe
@@ -117,7 +118,7 @@ struct MinifiedRecipeView: View {
                 managedObjContext.delete(recipe)
             }
         
-        LocalDataController().saveData(context: managedObjContext)
+        LocalDataController.shared.saveData(context: managedObjContext)
     }
     
     private func loadFavouritesStatus() {

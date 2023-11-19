@@ -62,7 +62,7 @@ struct IngredientsScreenView: View {
     private func deleteIngredient(offsets: IndexSet) {
         withAnimation {
             offsets.map { getFilteredItems()[$0] }.forEach(managedObjContext.delete)
-            LocalDataController().saveData(context: managedObjContext)
+            LocalDataController.shared.saveData(context: managedObjContext)
         }
     }
     
