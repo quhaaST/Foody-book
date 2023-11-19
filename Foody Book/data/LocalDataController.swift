@@ -13,7 +13,7 @@ class LocalDataController: ObservableObject {
     
     init() {
         container = NSPersistentContainer(name: "DataModel")
-
+        
         container.loadPersistentStores { _, error in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
@@ -35,6 +35,13 @@ class LocalDataController: ObservableObject {
         ingredient.id = UUID()
         ingredient.name = name
         ingredient.type = type.rawValue
+        
+        saveData(context: context)
+    }
+    
+    func addFavouriteRecipe(context: NSManagedObjectContext, recipeId: Int) {
+        let favouriteRecipe = FavouriteRecipe(context: context)
+        favouriteRecipe.id = Int32(recipeId)
         
         saveData(context: context)
     }
