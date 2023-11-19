@@ -20,5 +20,6 @@ struct RecipeDetailedInformationModel: Hashable, Codable {
 
 struct ExtendedIngredientModel: Hashable, Codable {
     let id: Int
+    let name: String
     let original: String
 }

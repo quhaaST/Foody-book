@@ -12,11 +12,6 @@ struct SearchScreenView: View {
     @StateObject var viewModel = SearchScreenViewModel()
     
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \FavouriteRecipe.id, ascending: true)],
-        animation: .default)
-    private var favouriteRecipes: FetchedResults<FavouriteRecipe>
-    
-    @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Ingredient.name, ascending: true)],
         predicate: NSPredicate(format: "type == %@", IngredientType.available.rawValue),
         animation: .default)
@@ -38,14 +33,7 @@ struct SearchScreenView: View {
                     LazyVStack(alignment: .leading, spacing: 16) {
                         ForEach(viewModel.minifiedRecipes, id: \.id) { recipe in
                             NavigationLink(destination: RecipeDetailsScreenView(recipeId: recipe.id)) {
-                                MinifiedRecipeView(
-                                    minifiedRecipeModel: recipe,
-                                    onLiked: onRecipeLiked,
-                                    onDisliked: onRecipeDisliked,
-                                    isInFavorites: !favouriteRecipes.filter { favouriteRecipe in
-                                        favouriteRecipe.id == Int32(recipe.id)
-                                    }.isEmpty
-                                )
+                                MinifiedRecipeView(minifiedRecipeModel: recipe)
                             }
                             .buttonStyle(PlainButtonStyle())
                         }
@@ -55,26 +43,6 @@ struct SearchScreenView: View {
                 .navigationBarHidden(true)
             }
         }
-    }
-    
-    private func onRecipeLiked(recipeId: Int) {
-        LocalDataController()
-            .addFavouriteRecipe(
-                context: managedObjContext,
-                recipeId: recipeId
-            )
-    }
-    
-    private func onRecipeDisliked(recipeId: Int) {
-        favouriteRecipes
-            .filter { recipe in
-                recipe.id == Int32(recipeId)
-            }
-            .forEach { recipe in
-                managedObjContext.delete(recipe)
-            }
-        
-        LocalDataController().saveData(context: managedObjContext)
     }
 }
 

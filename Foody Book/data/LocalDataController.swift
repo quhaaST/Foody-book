@@ -39,9 +39,12 @@ class LocalDataController: ObservableObject {
         saveData(context: context)
     }
     
-    func addFavouriteRecipe(context: NSManagedObjectContext, recipeId: Int) {
-        let favouriteRecipe = FavouriteRecipe(context: context)
-        favouriteRecipe.id = Int32(recipeId)
+    func addFavouriteRecipe(context: NSManagedObjectContext, recipeModel: MinifiedRecipeModel) {
+        let minifiedRecipe = MinifiedFavouriteRecipe(context: context)
+        minifiedRecipe.id = Int32(recipeModel.id)
+        minifiedRecipe.title = recipeModel.title
+        minifiedRecipe.image = recipeModel.image
+        minifiedRecipe.missedIngredientCount = Int32(recipeModel.missedIngredientCount)
         
         saveData(context: context)
     }
