@@ -33,20 +33,26 @@ struct SearchScreenView: View {
                     )
                 }
         } else {
-            ScrollView {
-                LazyVStack(alignment: .leading, spacing: 16) {
-                    ForEach(viewModel.minifiedRecipes, id: \.id) { recipe in
-                        MinifiedRecipeView(
-                            minifiedRecipeModel: recipe,
-                            onLiked: onRecipeLiked,
-                            onDisliked: onRecipeDisliked,
-                            isInFavorites: !favouriteRecipes.filter { favouriteRecipe in
-                                favouriteRecipe.id == Int32(recipe.id)
-                            }.isEmpty
-                        )
+            NavigationView {
+                ScrollView {
+                    LazyVStack(alignment: .leading, spacing: 16) {
+                        ForEach(viewModel.minifiedRecipes, id: \.id) { recipe in
+                            NavigationLink(destination: RecipeDetailsScreenView(recipeId: recipe.id)) {
+                                MinifiedRecipeView(
+                                    minifiedRecipeModel: recipe,
+                                    onLiked: onRecipeLiked,
+                                    onDisliked: onRecipeDisliked,
+                                    isInFavorites: !favouriteRecipes.filter { favouriteRecipe in
+                                        favouriteRecipe.id == Int32(recipe.id)
+                                    }.isEmpty
+                                )
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                        }
                     }
+                    .padding(.horizontal, 16)
                 }
-                .padding(.horizontal, 16)
+                .navigationBarHidden(true)
             }
         }
     }

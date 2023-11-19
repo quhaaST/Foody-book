@@ -81,14 +81,13 @@ struct MinifiedRecipeView: View {
             }
             .frame(height: 180)
             
-            HStack(alignment: .top) {
-                Text(minifiedRecipeModel.title.capitalized)
-                    .font(.system(size: 24, weight: .thin, design: .default))
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 10)
-                
-                Spacer()
-            }
+            Text(minifiedRecipeModel.title.capitalized)
+                .font(.system(size: 24, weight: .thin, design: .default))
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
+                .multilineTextAlignment(.leading)
+            
+            Spacer()
         }
         .background(Color.white)
         .cornerRadius(12)
