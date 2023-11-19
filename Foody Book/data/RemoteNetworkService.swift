@@ -34,4 +34,21 @@ struct RemoteNetworkService {
         
         return request
     }
+    
+    func getRecipeDetailsRequest(recipeId: Int) -> NSURLRequest {
+        let requstUrl = URL(
+            string: "\(RemoteNetworkService.baseUrl)/\(recipeId)/information"
+        )
+        
+        let request = NSMutableURLRequest(
+            url: requstUrl!,
+            cachePolicy: .useProtocolCachePolicy,
+            timeoutInterval: 10.0
+        )
+        
+        request.httpMethod = "GET"
+        request.allHTTPHeaderFields = RemoteNetworkService.headers
+        
+        return request
+    }
 }
