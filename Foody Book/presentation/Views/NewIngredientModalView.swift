@@ -10,7 +10,7 @@ import SwiftUI
 struct NewIngredientModalView: View {
     @Environment(\.managedObjectContext) var managedObjContext
     @Binding var isPresented: Bool
-        
+    
     @State private var name = ""
     @State private var alertIsDisplayed = false
     @State var selectedType: IngredientType
@@ -29,6 +29,8 @@ struct NewIngredientModalView: View {
                 
                 HStack {
                     Text("Ingredient type")
+                        .font(.system(size: 16, weight: .regular, design: .default))
+                        .foregroundColor(Color.init(uiColor: .lightGray))
                     
                     Spacer()
                     
@@ -40,7 +42,7 @@ struct NewIngredientModalView: View {
                     }
                     .pickerStyle(.menu)
                 }
-                    
+                
                 HStack {
                     Spacer()
                     

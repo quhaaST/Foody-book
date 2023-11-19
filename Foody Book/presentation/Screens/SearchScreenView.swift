@@ -8,9 +8,67 @@
 import SwiftUI
 
 struct SearchScreenView: View {
+    @Environment(\.managedObjectContext) var managedObjContext
+    @StateObject var viewModel = SearchScreenViewModel()
+    
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \FavouriteRecipe.id, ascending: true)],
+        animation: .default)
+    private var favouriteRecipes: FetchedResults<FavouriteRecipe>
+    
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \Ingredient.name, ascending: true)],
+        predicate: NSPredicate(format: "type == %@", IngredientType.available.rawValue),
+        animation: .default)
+    private var availableIngredient: FetchedResults<Ingredient>
+    
     var body: some View {
-        Text("Search screen view!")
-            .padding()
+        if viewModel.minifiedRecipes.isEmpty {
+            ProgressView()
+                .onAppear {
+                    viewModel.fetchRecipesByIngredients(
+                        availableIngredient.map { ingredient in
+                            ingredient.name ?? ""
+                        }
+                    )
+                }
+        } else {
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: 16) {
+                    ForEach(viewModel.minifiedRecipes, id: \.id) { recipe in
+                        MinifiedRecipeView(
+                            minifiedRecipeModel: recipe,
+                            onLiked: onRecipeLiked,
+                            onDisliked: onRecipeDisliked,
+                            isInFavorites: !favouriteRecipes.filter { favouriteRecipe in
+                                favouriteRecipe.id == Int32(recipe.id)
+                            }.isEmpty
+                        )
+                    }
+                }
+                .padding(.horizontal, 16)
+            }
+        }
+    }
+    
+    private func onRecipeLiked(recipeId: Int) {
+        LocalDataController()
+            .addFavouriteRecipe(
+                context: managedObjContext,
+                recipeId: recipeId
+            )
+    }
+    
+    private func onRecipeDisliked(recipeId: Int) {
+        favouriteRecipes
+            .filter { recipe in
+                recipe.id == Int32(recipeId)
+            }
+            .forEach { recipe in
+                managedObjContext.delete(recipe)
+            }
+        
+        LocalDataController().saveData(context: managedObjContext)
     }
 }
 

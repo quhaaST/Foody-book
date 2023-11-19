@@ -66,16 +66,11 @@ struct IngredientsScreenView: View {
         }
     }
     
-    private func getFilteredItems() -> Array<Ingredient> {
+    private func getFilteredItems() -> [Ingredient] {
         return self.ingredients.filter { ingredient in
             ingredient.type == selectedType.rawValue
         }
     }
-}
-
-enum IngredientType: String, CaseIterable, Identifiable {
-    case available, unliked, allergic
-    var id: Self { self }
 }
 
 struct IngredientsScreenView_Previews: PreviewProvider {
