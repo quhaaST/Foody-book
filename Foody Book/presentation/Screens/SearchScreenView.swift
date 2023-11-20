@@ -16,48 +16,48 @@ struct SearchScreenView: View {
     @State private var selectedType: SearchType = .ingredients
     
     var body: some View {
-        VStack(alignment: .center, spacing: 12) {
-            SearchField(searchText: $searchText)
-                .onChange(of: searchText) { _ in
-                    if searchText.isEmpty || searchText.count >= 3 {
-                        viewModel.loadDataUpdates(
-                            context: managedObjContext,
-                            searchType: selectedType,
-                            query: searchText
-                        )
+        NavigationView {
+            VStack(alignment: .center, spacing: 12) {
+                SearchField(searchText: $searchText)
+                    .onChange(of: searchText) { _ in
+                        if searchText.isEmpty || searchText.count >= 3 {
+                            viewModel.loadDataUpdates(
+                                context: managedObjContext,
+                                searchType: selectedType,
+                                query: searchText
+                            )
+                        }
                     }
+                    .padding(.horizontal, 16)
+                    .padding(.top, 8)
+                
+                Picker("Search type", selection: $selectedType) {
+                    ForEach(SearchType.allCases) { type in
+                        Text("By \(type.rawValue)")
+                    }
+                }
+                .pickerStyle(.segmented)
+                .onChange(of: selectedType) { _ in
+                    viewModel.loadDataUpdates(
+                        context: managedObjContext,
+                        searchType: selectedType,
+                        query: searchText
+                    )
                 }
                 .padding(.horizontal, 16)
-                .padding(.top, 8)
-            
-            Picker("Search type", selection: $selectedType) {
-                ForEach(SearchType.allCases) { type in
-                    Text("By \(type.rawValue)")
-                }
-            }
-            .pickerStyle(.segmented)
-            .onChange(of: selectedType) { _ in
-                viewModel.loadDataUpdates(
-                    context: managedObjContext,
-                    searchType: selectedType,
-                    query: searchText
-                )
-            }
-            .padding(.horizontal, 16)
-            
-            if viewModel.foundRecipes.isEmpty {
-                ProgressView()
-                    .onAppear {
-                        viewModel.loadDataUpdates(
-                            context: managedObjContext,
-                            searchType: selectedType,
-                            query: searchText
-                        )
-                    }
                 
-                Spacer()
-            } else {
-                NavigationView {
+                if viewModel.foundRecipes.isEmpty {
+                    ProgressView()
+                        .onAppear {
+                            viewModel.loadDataUpdates(
+                                context: managedObjContext,
+                                searchType: selectedType,
+                                query: searchText
+                            )
+                        }
+                    
+                    Spacer()
+                } else {
                     ScrollView(showsIndicators: false) {
                         LazyVStack(alignment: .leading, spacing: 16) {
                             ForEach(viewModel.foundRecipes, id: \.id) { recipe in
@@ -69,16 +69,16 @@ struct SearchScreenView: View {
                         }
                         .padding(.horizontal, 16)
                     }
-                    .navigationBarHidden(true)
                 }
             }
-        }
-        .onAppear {
-            viewModel.loadDataUpdates(
-                context: managedObjContext,
-                searchType: selectedType,
-                query: searchText
-            )
+            .onAppear {
+                viewModel.loadDataUpdates(
+                    context: managedObjContext,
+                    searchType: selectedType,
+                    query: searchText
+                )
+            }
+            .navigationBarHidden(true)
         }
     }
 }
