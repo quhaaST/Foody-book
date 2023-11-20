@@ -11,5 +11,9 @@ struct MinifiedRecipeModel: Hashable, Codable {
     let id: Int
     let title: String
     let image: String
-    let missedIngredientCount: Int
+    let missedIngredientCount: Int?
+}
+
+struct MinifiedRecipeSeacrhModel: Hashable, Codable {
+    let results: [MinifiedRecipeModel]
 }

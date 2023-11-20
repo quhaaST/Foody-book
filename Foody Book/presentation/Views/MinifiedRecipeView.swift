@@ -70,15 +70,17 @@ struct MinifiedRecipeView: View {
                     
                     Spacer()
                     
-                    HStack(alignment: .bottom) {
-                        Spacer()
-                        
-                        Text("Missing \(minifiedRecipeModel.missedIngredientCount) ingredients")
-                            .font(.system(size: 10, weight: .regular, design: .default))
-                            .padding(.vertical, 8)
-                            .padding(.horizontal, 10)
-                            .background(Color.init(uiColor: .lightText))
-                            .cornerRadius(12, corners: [.topLeft])
+                    if let missedIngredientsCount = minifiedRecipeModel.missedIngredientCount {
+                        HStack(alignment: .bottom) {
+                            Spacer()
+                            
+                            Text("Missing \(missedIngredientsCount) ingredients")
+                                .font(.system(size: 10, weight: .regular, design: .default))
+                                .padding(.vertical, 8)
+                                .padding(.horizontal, 10)
+                                .background(Color.init(uiColor: .lightText))
+                                .cornerRadius(12, corners: [.topLeft])
+                        }
                     }
                 }
             }

@@ -17,7 +17,7 @@ struct RecipeDetailsScreenView: View {
     
     var body: some View {
         if let recipeDetails = viewModel.recipeData {
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 12) {
                     AsyncImage(url: URL(string: recipeDetails.image)) { image in
                         image
@@ -85,7 +85,7 @@ struct RecipeDetailsScreenView: View {
                     } label: {
                         Text("Description")
                             .font(.system(size: 20, weight: .semibold, design: .default))
-                            .foregroundColor(Color.black)
+                            .foregroundColor(.primary)
                             .underline()
                     }
                     .padding(.horizontal, 8)
@@ -107,20 +107,18 @@ struct RecipeDetailsScreenView: View {
                     } label: {
                         Text("Ingredients")
                             .font(.system(size: 20, weight: .semibold, design: .default))
-                            .foregroundColor(Color.black)
+                            .foregroundColor(.primary)
                             .underline()
                     }
                     .padding(.horizontal, 8)
                     
                     Spacer()
                 }
-                .padding(.vertical, 0)
             }
             .onAppear {
                 viewModel.loadDataUpdates(context: managedObjContext, recipeId: recipeId)
             }
             .padding(.horizontal, 16)
-            .padding(.vertical, 0)
         } else {
             ProgressView()
                 .onAppear {
@@ -147,7 +145,7 @@ struct RecipeDetailsScreenView: View {
                 .padding(.horizontal, 10)
                 .padding(.vertical, 8)
                 .background(backgroundColor)
-                .foregroundColor(Color.white)
+                .foregroundColor(.secondary)
                 .cornerRadius(8)
         )
     }

@@ -51,4 +51,21 @@ struct RemoteNetworkService {
         
         return request
     }
+    
+    func getSearchRecipesRequest(query: String) -> NSURLRequest {
+        let requstUrl = URL(
+            string: "\(RemoteNetworkService.baseUrl)/complexSearch?query=\(query)&number=10&ranking=2"
+        )
+        
+        let request = NSMutableURLRequest(
+            url: requstUrl!,
+            cachePolicy: .useProtocolCachePolicy,
+            timeoutInterval: 10.0
+        )
+        
+        request.httpMethod = "GET"
+        request.allHTTPHeaderFields = RemoteNetworkService.headers
+        
+        return request
+    }
 }
