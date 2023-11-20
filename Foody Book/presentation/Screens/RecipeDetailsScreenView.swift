@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct RecipeDetailsScreenView: View {
+    @Environment(\.managedObjectContext) var managedObjContext
+    
     let recipeId: Int
+    
+    @State private var badges: [BadgeModel] = []
     @StateObject var viewModel = RecipeDetailedScreenViewModel()
     
     var body: some View {
@@ -32,6 +36,18 @@ struct RecipeDetailsScreenView: View {
                         .padding(.vertical, 10)
                         .padding(.horizontal, 8)
                         .multilineTextAlignment(.leading)
+                    
+                    let badges = viewModel.mapBadges(recipeModel: recipeDetails)
+                    if !badges.isEmpty {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            LazyHStack(alignment: .center, spacing: 12) {
+                                ForEach(badges, id: \.title.hashValue) { badge in
+                                    badgeView(badge: badge)
+                                }
+                            }
+                        }
+                        .padding(.horizontal, 8)
+                    }
                     
                     if let url = URL(string: recipeDetails.sourceUrl) {
                         HStack(alignment: .center, spacing: 8) {
@@ -76,14 +92,14 @@ struct RecipeDetailsScreenView: View {
                     
                     DisclosureGroup {
                         LazyVStack(alignment: .leading, spacing: 12) {
-                            // Workaround for the stuff, as with default ForEach the space after first item is appearing
-                            ForEach(1...recipeDetails.extendedIngredients.count - 1, id: \.self) { index in
+                            let enumeratedIngredients = Array(recipeDetails.extendedIngredients.enumerated())
+                            ForEach(enumeratedIngredients, id: \.element) { _, value in
                                 HStack {
                                     Image(systemName: "circle.fill")
                                         .resizable()
                                         .frame(width: 8, height: 8)
                                     
-                                    Text(recipeDetails.extendedIngredients[index].original.capitalized)
+                                    Text(value.original.capitalized)
                                 }
                             }
                         }
@@ -100,14 +116,40 @@ struct RecipeDetailsScreenView: View {
                 }
                 .padding(.vertical, 0)
             }
+            .onAppear {
+                viewModel.loadDataUpdates(context: managedObjContext, recipeId: recipeId)
+            }
             .padding(.horizontal, 16)
             .padding(.vertical, 0)
         } else {
             ProgressView()
                 .onAppear {
-                    viewModel.fetchRecipeDetailedInformation(recipeId: recipeId)
+                    viewModel.loadDataUpdates(context: managedObjContext, recipeId: recipeId)
                 }
         }
+    }
+    
+    private func badgeView(badge: BadgeModel) -> AnyView {
+        var backgroundColor = Color.green
+        
+        switch badge.type {
+        case .dangerous:
+            backgroundColor = Color.red
+        case .mixed:
+            backgroundColor = Color.yellow
+        default:
+            break
+        }
+        
+        return AnyView(
+            Text(badge.title)
+                .font(.system(size: 12, weight: .regular, design: .default))
+                .padding(.horizontal, 10)
+                .padding(.vertical, 8)
+                .background(backgroundColor)
+                .foregroundColor(Color.white)
+                .cornerRadius(8)
+        )
     }
 }
 

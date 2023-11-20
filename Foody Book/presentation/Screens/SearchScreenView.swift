@@ -11,21 +11,13 @@ struct SearchScreenView: View {
     @Environment(\.managedObjectContext) var managedObjContext
     @StateObject var viewModel = SearchScreenViewModel()
     
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Ingredient.name, ascending: true)],
-        predicate: NSPredicate(format: "type == %@", IngredientType.available.rawValue),
-        animation: .default)
-    private var availableIngredient: FetchedResults<Ingredient>
+    @State private var availableIngredients: [Ingredient] = []
     
     var body: some View {
         if viewModel.minifiedRecipes.isEmpty {
             ProgressView()
                 .onAppear {
-                    viewModel.fetchRecipesByIngredients(
-                        availableIngredient.map { ingredient in
-                            ingredient.name ?? ""
-                        }
-                    )
+                    viewModel.loadDataUpdates(context: managedObjContext)
                 }
         } else {
             NavigationView {
@@ -41,6 +33,9 @@ struct SearchScreenView: View {
                     .padding(.horizontal, 16)
                 }
                 .navigationBarHidden(true)
+            }
+            .onAppear {
+                viewModel.loadDataUpdates(context: managedObjContext)
             }
         }
     }

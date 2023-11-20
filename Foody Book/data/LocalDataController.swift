@@ -9,6 +9,8 @@ import Foundation
 import CoreData
 
 class LocalDataController: ObservableObject {
+    static let shared = LocalDataController()
+    
     let container: NSPersistentContainer
     
     init() {

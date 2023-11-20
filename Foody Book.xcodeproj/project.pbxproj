@@ -29,6 +29,7 @@
 		1DAA73172B0A809B009EB85F /* RecipeDetailedScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAA73162B0A809B009EB85F /* RecipeDetailedScreenViewModel.swift */; };
 		1DAA73192B0A80CF009EB85F /* RecipeDetailedInformationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAA73182B0A80CF009EB85F /* RecipeDetailedInformationModel.swift */; };
 		1DAA731D2B0A9BE0009EB85F /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAA731C2B0A9BE0009EB85F /* DataExtensions.swift */; };
+		1DAA731F2B0AC9DB009EB85F /* BadgeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAA731E2B0AC9DB009EB85F /* BadgeModel.swift */; };
 		7F01F597B4874C89B59BA0D7 /* Pods_Foody_Book.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7792AECA2374B4C7A6498E74 /* Pods_Foody_Book.framework */; };
 /* End PBXBuildFile section */
 
@@ -57,6 +58,7 @@
 		1DAA73162B0A809B009EB85F /* RecipeDetailedScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailedScreenViewModel.swift; sourceTree = "<group>"; };
 		1DAA73182B0A80CF009EB85F /* RecipeDetailedInformationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailedInformationModel.swift; sourceTree = "<group>"; };
 		1DAA731C2B0A9BE0009EB85F /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
+		1DAA731E2B0AC9DB009EB85F /* BadgeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeModel.swift; sourceTree = "<group>"; };
 		7792AECA2374B4C7A6498E74 /* Pods_Foody_Book.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Foody_Book.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A11DFA3AE509AE988D2D8710 /* Pods-Foody Book.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Foody Book.debug.xcconfig"; path = "Target Support Files/Pods-Foody Book/Pods-Foody Book.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -162,6 +164,7 @@
 				1DAA730F2B0A5313009EB85F /* MinifiedRecipeModel.swift */,
 				1DAA73142B0A67D3009EB85F /* IngredientType.swift */,
 				1DAA73182B0A80CF009EB85F /* RecipeDetailedInformationModel.swift */,
+				1DAA731E2B0AC9DB009EB85F /* BadgeModel.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -328,6 +331,7 @@
 				1DAA73132B0A5A21009EB85F /* SearchScreenViewModel.swift in Sources */,
 				1DAA731D2B0A9BE0009EB85F /* DataExtensions.swift in Sources */,
 				1DAA73172B0A809B009EB85F /* RecipeDetailedScreenViewModel.swift in Sources */,
+				1DAA731F2B0AC9DB009EB85F /* BadgeModel.swift in Sources */,
 				1DAA72BE2B078C89009EB85F /* Foody_Book.xcdatamodeld in Sources */,
 				1DAA73012B08F3BA009EB85F /* DataModel.xcdatamodeld in Sources */,
 				1DAA72C72B079995009EB85F /* SearchScreenView.swift in Sources */,
