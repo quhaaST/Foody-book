@@ -8,7 +8,7 @@
     <entity name="MinifiedFavouriteRecipe" representedClassName="MinifiedFavouriteRecipe" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="image" attributeType="String" defaultValueString=""/>
-        <attribute name="missedIngredientCount" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="missedIngredientCount" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
         <attribute name="title" attributeType="String" defaultValueString=""/>
     </entity>
 </model>

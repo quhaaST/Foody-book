@@ -46,8 +46,10 @@ class LocalDataController: ObservableObject {
         minifiedRecipe.id = Int32(recipeModel.id)
         minifiedRecipe.title = recipeModel.title
         minifiedRecipe.image = recipeModel.image
-        minifiedRecipe.missedIngredientCount = Int32(recipeModel.missedIngredientCount)
         
+        if let missedIngredientsCount = recipeModel.missedIngredientCount {
+            minifiedRecipe.missedIngredientCount = Int32(missedIngredientsCount)
+        }
         saveData(context: context)
     }
 }
