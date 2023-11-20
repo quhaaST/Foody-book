@@ -10,7 +10,7 @@ import Foundation
 struct RemoteNetworkService {
     private static let baseUrl = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes"
     private static let headers = [
-        "X-RapidAPI-Key": "ae82256649msh8a348353e170fc9p1d3446jsn81b05e7c5060",
+        "X-RapidAPI-Key": "YOUR_API_KEY",
         "X-RapidAPI-Host": "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com"
     ]
     

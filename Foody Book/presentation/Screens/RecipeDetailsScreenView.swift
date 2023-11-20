@@ -12,7 +12,6 @@ struct RecipeDetailsScreenView: View {
     
     let recipeId: Int
     
-    @State private var badges: [BadgeModel] = []
     @StateObject var viewModel = RecipeDetailedScreenViewModel()
     
     var body: some View {

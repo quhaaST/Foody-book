@@ -11,50 +11,39 @@ struct SearchScreenView: View {
     @Environment(\.managedObjectContext) var managedObjContext
     @StateObject var viewModel = SearchScreenViewModel()
     
-    @State private var availableIngredients: [Ingredient] = []
-    @State private var searchText: String = ""
-    @State private var selectedType: SearchType = .ingredients
-    
     var body: some View {
         NavigationView {
             VStack(alignment: .center, spacing: 12) {
-                SearchField(searchText: $searchText)
-                    .onChange(of: searchText) { _ in
-                        if searchText.isEmpty || searchText.count >= 3 {
+                SearchField(searchText: $viewModel.searchText)
+                    .onChange(of: viewModel.searchText) { _ in
+                        if viewModel.searchText.isEmpty || viewModel.searchText.count >= 3 {
                             viewModel.loadDataUpdates(
                                 context: managedObjContext,
-                                searchType: selectedType,
-                                query: searchText
+                                searchType: viewModel.searchType,
+                                query: viewModel.searchText
                             )
                         }
                     }
                     .padding(.horizontal, 16)
                     .padding(.top, 8)
                 
-                Picker("Search type", selection: $selectedType) {
+                Picker("Search type", selection: $viewModel.searchType) {
                     ForEach(SearchType.allCases) { type in
                         Text("By \(type.rawValue)")
                     }
                 }
                 .pickerStyle(.segmented)
-                .onChange(of: selectedType) { _ in
+                .onChange(of: viewModel.searchType) { _ in
                     viewModel.loadDataUpdates(
                         context: managedObjContext,
-                        searchType: selectedType,
-                        query: searchText
+                        searchType: viewModel.searchType,
+                        query: viewModel.searchText
                     )
                 }
                 .padding(.horizontal, 16)
                 
                 if viewModel.foundRecipes.isEmpty {
                     ProgressView()
-                        .onAppear {
-                            viewModel.loadDataUpdates(
-                                context: managedObjContext,
-                                searchType: selectedType,
-                                query: searchText
-                            )
-                        }
                     
                     Spacer()
                 } else {
@@ -62,7 +51,18 @@ struct SearchScreenView: View {
                         LazyVStack(alignment: .leading, spacing: 16) {
                             ForEach(viewModel.foundRecipes, id: \.id) { recipe in
                                 NavigationLink(destination: RecipeDetailsScreenView(recipeId: recipe.id)) {
-                                    MinifiedRecipeView(minifiedRecipeModel: recipe)
+                                    MinifiedRecipeView(
+                                        minifiedRecipeModel: recipe,
+                                        onRecipeLiked: {
+                                            viewModel.onRecipeLiked(context: managedObjContext, recipe: recipe)
+                                        },
+                                        onRecipeDisliked: {
+                                            viewModel.onRecipeDisliked(context: managedObjContext, recipeId: recipe.id)
+                                        },
+                                        isInFavourites: $viewModel.favouriteRecipes.contains { favoriteRecipe in
+                                            favoriteRecipe.id == recipe.id
+                                        }
+                                    )
                                 }
                                 .buttonStyle(PlainButtonStyle())
                             }
@@ -71,14 +71,14 @@ struct SearchScreenView: View {
                     }
                 }
             }
-            .onAppear {
-                viewModel.loadDataUpdates(
-                    context: managedObjContext,
-                    searchType: selectedType,
-                    query: searchText
-                )
-            }
             .navigationBarHidden(true)
+        }
+        .onAppear {
+            viewModel.loadDataUpdates(
+                context: managedObjContext,
+                searchType: viewModel.searchType,
+                query: viewModel.searchText
+            )
         }
     }
 }
