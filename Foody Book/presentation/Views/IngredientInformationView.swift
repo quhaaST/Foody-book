@@ -9,7 +9,6 @@ import SwiftUI
 
 struct IngredientInformationView: View {
     let ingredientName: String
-    let onCrossClick: () -> Void = {}
     
     var body: some View {
         HStack {

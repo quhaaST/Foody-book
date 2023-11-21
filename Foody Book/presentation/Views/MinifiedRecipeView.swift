@@ -12,9 +12,9 @@ struct MinifiedRecipeView: View {
     @Environment(\.managedObjectContext) var managedObjContext
     
     let minifiedRecipeModel: MinifiedRecipeModel
-    
-    @State private var isInFavorites = false
-    @State private var favouriteRecipes: [MinifiedFavouriteRecipe] = []
+    let onRecipeLiked: () -> Void
+    let onRecipeDisliked: () -> Void
+    @State var isInFavourites: Bool
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -38,15 +38,15 @@ struct MinifiedRecipeView: View {
                         Spacer()
                         
                         Button {
-                            isInFavorites.toggle()
+                            isInFavourites.toggle()
                             
-                            if isInFavorites {
-                                onRecipeLiked(recipe: minifiedRecipeModel)
+                            if isInFavourites {
+                                onRecipeLiked()
                             } else {
-                                onRecipeDisliked(recipeId: minifiedRecipeModel.id)
+                                onRecipeDisliked()
                             }
                         } label: {
-                            if isInFavorites {
+                            if isInFavourites {
                                 Image(systemName: "heart.fill")
                                     .resizable()
                                     .frame(width: 16, height: 16)
@@ -94,49 +94,9 @@ struct MinifiedRecipeView: View {
             
             Spacer()
         }
-        .onAppear {
-            loadFavouritesStatus()
-        }
         .background(Color.white)
         .cornerRadius(12)
         .shadow(radius: 4)
-    }
-    
-    private func onRecipeLiked(recipe: MinifiedRecipeModel) {
-        LocalDataController
-            .shared
-            .addFavouriteRecipe(
-                context: managedObjContext,
-                recipeModel: recipe
-            )
-    }
-    
-    private func onRecipeDisliked(recipeId: Int) {
-        favouriteRecipes
-            .filter { recipe in
-                recipe.id == Int32(recipeId)
-            }
-            .forEach { recipe in
-                managedObjContext.delete(recipe)
-            }
-        
-        LocalDataController.shared.saveData(context: managedObjContext)
-    }
-    
-    private func loadFavouritesStatus() {
-        let request = MinifiedFavouriteRecipe.fetchRequest()
-        
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \MinifiedFavouriteRecipe.title, ascending: true)]
-        request.predicate = NSPredicate(format: "id = %@", String(minifiedRecipeModel.id))
-        
-        do {
-            let data = try managedObjContext.fetch(request)
-            favouriteRecipes = data
-            isInFavorites = !data.isEmpty
-        } catch {
-            favouriteRecipes = []
-            isInFavorites = false
-        }
     }
 }
 
@@ -148,7 +108,10 @@ struct MinifiedRecipeView_Previews: PreviewProvider {
                 title: "Title",
                 image: "https://spoonacular.com/recipeImages/615374-312x231.jpg",
                 missedIngredientCount: 10
-            )
+            ),
+            onRecipeLiked: {},
+            onRecipeDisliked: {},
+            isInFavourites: true
         )
     }
 }

@@ -10,16 +10,13 @@ import SwiftUI
 struct FavouritesScreenView: View {
     @Environment(\.managedObjectContext) var managedObjContext
     
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \MinifiedFavouriteRecipe.id, ascending: true)],
-        animation: .default)
-    private var favouriteRecipes: FetchedResults<MinifiedFavouriteRecipe>
+    @StateObject var viewModel = FavouritesScreenViewModel()
     
     var body: some View {
         NavigationView {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 16) {
-                    ForEach(favouriteRecipes, id: \.id) { recipe in
+                    ForEach(viewModel.favouriteRecipes, id: \.id) { recipe in
                         let recipeModel = MinifiedRecipeModel(
                             id: Int(recipe.id),
                             title: recipe.title ?? "",
@@ -28,7 +25,17 @@ struct FavouritesScreenView: View {
                         )
                         
                         NavigationLink(destination: RecipeDetailsScreenView(recipeId: recipeModel.id)) {
-                            MinifiedRecipeView(minifiedRecipeModel: recipeModel)
+                            MinifiedRecipeView(
+                                minifiedRecipeModel: recipeModel,
+                                onRecipeLiked: {
+                                    viewModel.onRecipeLiked(context: managedObjContext, recipe: recipeModel)
+                                },
+                                onRecipeDisliked: {
+                                    viewModel.onRecipeDisliked(context: managedObjContext, recipeId: recipeModel.id)
+                                },
+                                isInFavourites: $viewModel.favouriteRecipes.contains { favoriteRecipe in
+                                    favoriteRecipe.id == recipeModel.id
+                                })
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
@@ -36,6 +43,9 @@ struct FavouritesScreenView: View {
                 .padding(.horizontal, 16)
             }
             .navigationBarHidden(true)
+        }
+        .onAppear {
+            viewModel.fetchFavouritesData(context: managedObjContext)
         }
     }
 }

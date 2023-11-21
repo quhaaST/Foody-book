@@ -10,7 +10,10 @@ import CoreData
 
 class SearchScreenViewModel: ObservableObject {
     @Published var foundRecipes: [MinifiedRecipeModel] = []
-    private var searchType: SearchType = .ingredients
+    @Published var searchText: String = ""
+    @Published var searchType: SearchType = .ingredients
+    @Published var favouriteRecipes: [MinifiedFavouriteRecipe] = []
+    
     private var availableIngredients: [Ingredient] = []
     
     func loadDataUpdates(
@@ -19,6 +22,7 @@ class SearchScreenViewModel: ObservableObject {
         query: String
     ) {
         fetchAvailableProducts(context: context)
+        fetchFavouriteRecipes(context: context)
         
         if searchType == .ingredients {
             fetchRecipesByIngredients(
@@ -92,5 +96,39 @@ class SearchScreenViewModel: ObservableObject {
         } catch {
             availableIngredients = []
         }
+    }
+    
+    func fetchFavouriteRecipes(context: NSManagedObjectContext) {
+        let request = MinifiedFavouriteRecipe.fetchRequest()
+        
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \MinifiedFavouriteRecipe.id, ascending: true)]
+        
+        do {
+            let data = try context.fetch(request)
+            favouriteRecipes = data
+        } catch {
+            favouriteRecipes = []
+        }
+    }
+    
+    func onRecipeLiked(context: NSManagedObjectContext, recipe: MinifiedRecipeModel) {
+        LocalDataController
+            .shared
+            .addFavouriteRecipe(
+                context: context,
+                recipeModel: recipe
+            )
+    }
+    
+    func onRecipeDisliked(context: NSManagedObjectContext, recipeId: Int) {
+        favouriteRecipes
+            .filter { recipe in
+                recipe.id == Int32(recipeId)
+            }
+            .forEach { recipe in
+                context.delete(recipe)
+            }
+        
+        LocalDataController.shared.saveData(context: context)
     }
 }

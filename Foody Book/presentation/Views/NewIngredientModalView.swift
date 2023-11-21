@@ -9,19 +9,19 @@ import SwiftUI
 
 struct NewIngredientModalView: View {
     @Environment(\.managedObjectContext) var managedObjContext
-    @Binding var isPresented: Bool
     
-    @State private var name = ""
-    @State private var alertIsDisplayed = false
-    @State var selectedType: IngredientType
+    @Binding var isPresented: Bool
+    @Binding var selectedType: IngredientType
+    
+    @StateObject var viewModel = NewIngredientModelViewModel()
     
     var body: some View {
         Form {
             Section("New ingredient") {
-                TextField("Ingredient name", text: $name)
-                    .alert("Empty field", isPresented: $alertIsDisplayed) {
+                TextField("Ingredient name", text: $viewModel.name)
+                    .alert("Empty field", isPresented: $viewModel.alertIsDisplayed) {
                         Button("Close") {
-                            alertIsDisplayed = false
+                            viewModel.alertIsDisplayed = false
                         }
                     } message: {
                         Text("The ingredient name should be non-empty.")
@@ -47,10 +47,10 @@ struct NewIngredientModalView: View {
                     Spacer()
                     
                     Button("Create") {
-                        if name.isEmpty {
-                            alertIsDisplayed = true
+                        if viewModel.name.isEmpty {
+                            viewModel.alertIsDisplayed = true
                         } else {
-                            addIngredient()
+                            viewModel.addIngredient(context: managedObjContext, selectedType: selectedType)
                             isPresented = false
                         }
                     }
@@ -60,23 +60,13 @@ struct NewIngredientModalView: View {
             }
         }
     }
-    
-    private func addIngredient() {
-        LocalDataController
-            .shared
-            .addIngredient(
-                context: managedObjContext,
-                name: name,
-                type: selectedType
-            )
-    }
 }
 
 struct NewIngredientModalView_Previews: PreviewProvider {
     static var previews: some View {
         NewIngredientModalView(
             isPresented: .constant(true),
-            selectedType: .available
+            selectedType: .constant(.available)
         )
     }
 }

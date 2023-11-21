@@ -31,6 +31,9 @@
 		1DAA731F2B0AC9DB009EB85F /* BadgeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAA731E2B0AC9DB009EB85F /* BadgeModel.swift */; };
 		1DAA73232B0B1359009EB85F /* SearchType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAA73222B0B1359009EB85F /* SearchType.swift */; };
 		1DAA73252B0B20A2009EB85F /* SearchField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAA73242B0B20A2009EB85F /* SearchField.swift */; };
+		1DAA73272B0B9B47009EB85F /* IngredientsScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAA73262B0B9B47009EB85F /* IngredientsScreenViewModel.swift */; };
+		1DAA73292B0B9F25009EB85F /* NewIngredientModalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAA73282B0B9F25009EB85F /* NewIngredientModalViewModel.swift */; };
+		1DAA732B2B0BA044009EB85F /* FavouritesScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAA732A2B0BA044009EB85F /* FavouritesScreenViewModel.swift */; };
 		7F01F597B4874C89B59BA0D7 /* Pods_Foody_Book.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7792AECA2374B4C7A6498E74 /* Pods_Foody_Book.framework */; };
 /* End PBXBuildFile section */
 
@@ -61,6 +64,9 @@
 		1DAA731E2B0AC9DB009EB85F /* BadgeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeModel.swift; sourceTree = "<group>"; };
 		1DAA73222B0B1359009EB85F /* SearchType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchType.swift; sourceTree = "<group>"; };
 		1DAA73242B0B20A2009EB85F /* SearchField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchField.swift; sourceTree = "<group>"; };
+		1DAA73262B0B9B47009EB85F /* IngredientsScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientsScreenViewModel.swift; sourceTree = "<group>"; };
+		1DAA73282B0B9F25009EB85F /* NewIngredientModalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewIngredientModalViewModel.swift; sourceTree = "<group>"; };
+		1DAA732A2B0BA044009EB85F /* FavouritesScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesScreenViewModel.swift; sourceTree = "<group>"; };
 		7792AECA2374B4C7A6498E74 /* Pods_Foody_Book.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Foody_Book.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A11DFA3AE509AE988D2D8710 /* Pods-Foody Book.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Foody Book.debug.xcconfig"; path = "Target Support Files/Pods-Foody Book/Pods-Foody Book.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -186,6 +192,9 @@
 			children = (
 				1DAA73122B0A5A21009EB85F /* SearchScreenViewModel.swift */,
 				1DAA73162B0A809B009EB85F /* RecipeDetailedScreenViewModel.swift */,
+				1DAA73262B0B9B47009EB85F /* IngredientsScreenViewModel.swift */,
+				1DAA73282B0B9F25009EB85F /* NewIngredientModalViewModel.swift */,
+				1DAA732A2B0BA044009EB85F /* FavouritesScreenViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -332,10 +341,13 @@
 				1DAA72C92B0799A3009EB85F /* IngredientsScreenView.swift in Sources */,
 				1DAA73152B0A67D3009EB85F /* IngredientType.swift in Sources */,
 				1DAA72B42B078C89009EB85F /* ContentView.swift in Sources */,
+				1DAA732B2B0BA044009EB85F /* FavouritesScreenViewModel.swift in Sources */,
 				1DAA73252B0B20A2009EB85F /* SearchField.swift in Sources */,
 				1DAA73132B0A5A21009EB85F /* SearchScreenViewModel.swift in Sources */,
 				1DAA731D2B0A9BE0009EB85F /* DataExtensions.swift in Sources */,
 				1DAA73172B0A809B009EB85F /* RecipeDetailedScreenViewModel.swift in Sources */,
+				1DAA73292B0B9F25009EB85F /* NewIngredientModalViewModel.swift in Sources */,
+				1DAA73272B0B9B47009EB85F /* IngredientsScreenViewModel.swift in Sources */,
 				1DAA731F2B0AC9DB009EB85F /* BadgeModel.swift in Sources */,
 				1DAA73012B08F3BA009EB85F /* DataModel.xcdatamodeld in Sources */,
 				1DAA72C72B079995009EB85F /* SearchScreenView.swift in Sources */,

@@ -10,13 +10,7 @@ import CoreData
 
 struct IngredientsScreenView: View {
     @Environment(\.managedObjectContext) var managedObjContext
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Ingredient.name, ascending: true)],
-        animation: .default)
-    private var ingredients: FetchedResults<Ingredient>
-    
-    @State private var showAddIngredientView = false
-    @State private var selectedType: IngredientType = .available
+    @StateObject var viewModel = IngredientsScreenViewModel()
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -27,21 +21,26 @@ struct IngredientsScreenView: View {
                 Spacer()
                 
                 Button {
-                    showAddIngredientView = true
+                    viewModel.showAddIngredientView = true
                 } label: {
                     Label("Indredient", systemImage: "plus.circle")
                 }
                 .buttonStyle(.bordered)
-                .sheet(isPresented: $showAddIngredientView) {
+                .sheet(isPresented: $viewModel.showAddIngredientView) {
                     NewIngredientModalView(
-                        isPresented: $showAddIngredientView,
-                        selectedType: selectedType
+                        isPresented: $viewModel.showAddIngredientView,
+                        selectedType: $viewModel.selectedType
                     )
+                }
+                .onChange(of: viewModel.showAddIngredientView) { value in
+                    if !value {
+                        viewModel.fetchIngredientsUpdates(context: managedObjContext)
+                    }
                 }
             }
             .padding(.vertical, 12)
             
-            Picker("Ingredient type", selection: $selectedType) {
+            Picker("Ingredient type", selection: $viewModel.selectedType) {
                 ForEach(IngredientType.allCases) { type in
                     Text(type.rawValue.capitalized)
                 }
@@ -49,27 +48,19 @@ struct IngredientsScreenView: View {
             .pickerStyle(.segmented)
             
             List {
-                ForEach(getFilteredItems()) { ingredient in
+                ForEach(viewModel.getFilteredItems()) { ingredient in
                     IngredientInformationView(ingredientName: ingredient.name ?? "")
-                }.onDelete(perform: deleteIngredient)
+                }.onDelete { offsets in
+                    viewModel.deleteIngredient(offsets: offsets, context: managedObjContext)
+                }
             }
             .listStyle(.plain)
             .padding(.horizontal, -16)
         }
+        .onAppear {
+            viewModel.fetchIngredientsUpdates(context: managedObjContext)
+        }
         .padding(.horizontal, 16)
-    }
-    
-    private func deleteIngredient(offsets: IndexSet) {
-        withAnimation {
-            offsets.map { getFilteredItems()[$0] }.forEach(managedObjContext.delete)
-            LocalDataController.shared.saveData(context: managedObjContext)
-        }
-    }
-    
-    private func getFilteredItems() -> [Ingredient] {
-        return self.ingredients.filter { ingredient in
-            ingredient.type == selectedType.rawValue
-        }
     }
 }
 
